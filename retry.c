@@ -53,7 +53,7 @@ int main(int argc,char * const argv[]) {
 	int delay=0;
 	int expect=0; // What value to expect
 
-	while ((opt=getopt(argc,argv,"hvt:"))!= -1) {
+	while ((opt=getopt(argc,argv,"+hvt:"))!= -1) {
 		switch (opt) {
 			case 'h':
 				usage();
