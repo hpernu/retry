@@ -9,7 +9,7 @@ jobs:
           command: whoami && pwd && dpkg -l | sort
       - run:
           name: Prep
-          command: apt-get install -y make gcc perl-base
+          command: apt-get update && apt-get install -y make gcc perl-base
       - checkout
       - run:
           name: Build+test
