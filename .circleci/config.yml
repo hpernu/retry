@@ -13,7 +13,7 @@ jobs:
       - checkout
       - run:
           name: Install build dependencies
-          command: ( apt-get install -y make gcc perl-base || yum-builddep *.spec )
+          command: ( apt-get install -y make gcc perl-base || yum-builddep -y *.spec )
       - run:
           name: Build+test
           command: make all
