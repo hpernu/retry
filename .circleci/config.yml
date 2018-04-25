@@ -6,7 +6,7 @@ jobs:
     steps:
       - run:
           name: Prep
-	  command: sudo apt-get install -y make gcc perl
+          command: sudo apt-get install -y make gcc perl
       - checkout
       - run:
           name: Build+test
