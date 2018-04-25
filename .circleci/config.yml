@@ -9,8 +9,11 @@ jobs:
           command: whoami && pwd && ( ( dpkg -l || rpm -qa ) | sort )
       - run:
           name: Prep
-          command: ( apt-get update && apt-get install -y make gcc perl-base git ) || yum -y install yum-utils git
+          command: ( apt-get update && apt-get install -y git ) || yum -y install yum-utils git
       - checkout
+      - run:
+          name: Install build dependencies
+          command: ( apt-get install -y make gcc perl-base || yum-builddep *.spec )
       - run:
           name: Build+test
           command: make all
