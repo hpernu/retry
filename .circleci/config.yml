@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: debian:stretch
+      	command: [apt install -y make gcc perl]
     steps:
       - checkout
       - run:
