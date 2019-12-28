@@ -1,2 +1,6 @@
 /retry
 .testrun
+.cproject
+.project
+.settings/
+.circleci/tmp.*
