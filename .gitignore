@@ -4,3 +4,4 @@
 .project
 .settings/
 .circleci/tmp.*
+*.rpm
