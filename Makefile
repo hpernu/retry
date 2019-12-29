@@ -13,6 +13,9 @@ test: .testrun
 	perl ./test.pl
 	touch .testrun
 
+disttest:
+	perl ./test.pl /usr/bin/retry
+
 install: retry
 	$(INSTALL) -D -s retry $(BINDIR)/retry
 

@@ -1,4 +1,13 @@
-$prog="./retry" ;
+
+if ($ARGV[0]) {
+	$prog=$ARGV[0];
+} else {
+	$prog="./retry" ;
+}
+
+if (! -x "$prog") {
+	die("$prog is non-existent or not executable: please define the path or compile first");	
+}
 
 sub runtest {
 	my $testname=shift @_;
