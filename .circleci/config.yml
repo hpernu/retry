@@ -1,4 +1,24 @@
 version: 2.1
+
+commands:
+  testrun:
+    steps:
+      - attach_workspace:
+          at: /dist
+      - run:
+          name: Installation test
+          command: find /dist -name *.rpm | fgrep -v .src.rpm | xargs yum install -y
+      - run:
+          name: Install git
+          command: yum install -y git
+      - checkout
+      - run:
+          name: Test preparation
+          command: .circleci/testprep.sh
+      - run:
+          name: Distribution validity test
+          command: make disttest
+
 jobs:
   build:
     docker:
@@ -31,51 +51,13 @@ jobs:
     docker:
       - image: centos:centos7
     steps:
-      - run:
-          name: Install basic tools
-          command: |
-            yum install -y git
-      - checkout
-      - attach_workspace:
-          at: dist/
-      - run:
-          name: Test preparation
-          command: .circleci/testprep.sh
-      - run:
-          name: Installation test
-          command: find dist/ -name *.rpm | fgrep -v .src.rpm | xargs yum install -y
-      - run:
-          name: Distribution validity test
-          command: |
-            make disttest
-      - store_artifacts:
-          path: final/
-          destination: /
+      - testrun
 
   test8:
     docker:
       - image: centos:centos8
     steps:
-      - run:
-          name: Install basic tools
-          command: |
-            yum install -y git
-      - checkout
-      - attach_workspace:
-          at: dist/
-      - run:
-          name: Test preparation
-          command: .circleci/testprep.sh
-      - run:
-          name: Installation test
-          command: find dist/ -name *.rpm | fgrep -v .src.rpm | xargs yum install -y
-      - run:
-          name: Distribution validity test
-          command: |
-            make disttest
-      - store_artifacts:
-          path: final/
-          destination: /
+      - testrun
 
   finalize:
     docker:
@@ -105,4 +87,3 @@ workflows:
           requires:
             - test7
             - test8
-     
