@@ -67,7 +67,9 @@ jobs:
           at: dist/
       - run:
           name: Move to final location
-          command: mv dist/* final
+          command: |
+            mkdir -p final
+            mv dist/*.rpm final/
       - store_artifacts:
           path: final/
           destination: /
