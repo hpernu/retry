@@ -5,11 +5,19 @@ BINDIR=$(DESTDIR)/usr/bin
 CFLAGS=-g -Wall
 
 # Rely on default rule
-retry: retry.c
+retry: retry.c version.h
+
+all: retry
+
+# Build version.h on-fly
+version.h: .git/ Makefile
+	printf 'const char *version="%s";\n' `git tag | tail -n 1` > version.h.tmp
+	mv version.h.tmp version.h
 
 test: .testrun
 
 .testrun: retry test.pl testretry.pl
+	./retry --version
 	perl ./test.pl
 	touch .testrun
 

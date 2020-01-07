@@ -6,3 +6,4 @@
 .circleci/tmp.*
 *.rpm
 dist/
+/version.h

@@ -17,9 +17,11 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
+#include "version.h"
+
 void usage() {
 	fprintf(stderr,
-			"%s [-hv] [-t timeout] times delay cmd [cmdarg] [cmdarg] [...]\n",
+			"%s [--version] [-hv] [-t timeout] times delay cmd [cmdarg] [cmdarg] [...]\n",
 			"retry");
 	exit(EXIT_FAILURE);
 }
@@ -53,6 +55,11 @@ int main(int argc, char * const argv[]) {
 	int count = 0;
 	int delay = 0;
 	int expect = 0; // What value to expect
+
+	if (argc>=2 && strcmp("--version",argv[1])==0) {
+		fprintf(stderr,"%s\n",version);
+		exit(0);
+	}
 
 	while ((opt = getopt(argc, argv, "+hvt:")) != -1) {
 		switch (opt) {
