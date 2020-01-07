@@ -5,3 +5,4 @@
 .settings/
 .circleci/tmp.*
 *.rpm
+dist/
