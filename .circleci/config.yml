@@ -41,11 +41,13 @@ jobs:
             rm -f *.rpm
             tar -zcvf /tmp/retry.tar.gz *
             rpmbuild -ta /tmp/retry.tar.gz
-            mkdir -p dist
-            find /root/rpmbuild -name *.rpm | xargs -I RPM -n 1 -P10 mv -v RPM dist/
+            make -j2
+            mkdir -p /dist/.
+            find /root/rpmbuild -name *.rpm | xargs -I RPM -n 1 -P10 mv -v RPM /dist/
+            mv -v retry /dist/
       - persist_to_workspace:
-          root: dist/
-          paths: ./*.rpm
+          root: /dist/
+          paths: ./*
 
   test7:
     docker:
@@ -59,17 +61,29 @@ jobs:
     steps:
       - testrun
 
+  publish-github-release:
+    docker:
+      - image: cibuilds/github:0.10
+    steps:
+      - attach_workspace:
+          at: /dist
+      - run:
+          name: "Publish Release on GitHub"
+          command: |
+            VERSION=$(/dist/retry --version)
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /dist/
+
   finalize:
     docker:
       - image: centos:latest
     steps:
       - attach_workspace:
-          at: dist/
+          at: /dist
       - run:
           name: Move to final location
           command: |
             mkdir -p final
-            mv dist/*.rpm final/
+            mv /dist/*.rpm final/
       - store_artifacts:
           path: final/
           destination: /
@@ -85,6 +99,13 @@ workflows:
       - test8:
           requires:
             - build
+      - publish-github-release:
+          filters:
+            branches:
+              only: not-yet-working-gh-integartion-master
+          requires:
+            - test7
+            - test8
       - finalize:
           requires:
             - test7
