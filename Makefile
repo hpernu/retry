@@ -10,7 +10,7 @@ retry: retry.c version.h
 all: retry
 
 # Build version.h on-fly
-version.h: .git/ Makefile
+version.h: Makefile
 	printf 'const char *version="%s";\n' `git tag | tail -n 1` > version.h.tmp
 	mv version.h.tmp version.h
 
