@@ -77,7 +77,7 @@ jobs:
             test -n "$CIRCLE_PROJECT_USERNAME"
             test -n "$CIRCLE_PROJECT_REPONAME"
             test -n "$CIRCLE_SHA1"
-            echo ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /dist/
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /dist/
 
   finalize:
     docker:
