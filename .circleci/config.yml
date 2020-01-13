@@ -61,17 +61,23 @@ jobs:
     steps:
       - testrun
 
-  publish-github-release:
+  github-publish:
     docker:
-      - image: cibuilds/github:0.10
+      - image: cibuilds/github:0.13
     steps:
+      - checkout
       - attach_workspace:
           at: /dist
       - run:
           name: "Publish Release on GitHub"
           command: |
-            VERSION=$(/dist/retry --version)
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /dist/
+            VERSION=$(git tag | tail -n 1)
+            test -n "$VERSION"
+            test -n "$GITHUB_TOKEN"
+            test -n "$CIRCLE_PROJECT_USERNAME"
+            test -n "$CIRCLE_PROJECT_REPONAME"
+            test -n "$CIRCLE_SHA1"
+            echo ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /dist/
 
   finalize:
     docker:
@@ -99,10 +105,10 @@ workflows:
       - test8:
           requires:
             - build
-      - publish-github-release:
+      - github-publish:
           filters:
             branches:
-              only: not-yet-working-gh-integartion-master
+              only: master
           requires:
             - test7
             - test8
