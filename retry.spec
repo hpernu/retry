@@ -42,5 +42,8 @@ make %{?_smp_mflags} test
 %{_bindir}/retry
 
 %changelog
+* Mon Jan 13 2020 Heikki Pernu 1.1
+- Working with Github publish
+
 * Sat Dec 28 2019 Heikki Pernu 1.0
 - First RPM version
